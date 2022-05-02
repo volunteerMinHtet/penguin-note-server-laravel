@@ -18,4 +18,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-include(__DIR__ . '/v1/api.php');
+Route::prefix('v1')->group(function() {
+    include(__DIR__ . '/v1/api.php');
+});
+
+
