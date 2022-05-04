@@ -1,8 +1,8 @@
 <?php
 
-namespace App\V1\Traits;
+namespace App\Traits\V1;
 
-trait ResponseAPI
+trait ResponseApi
 {
     public function coreResponse($message, $data = null, $statusCode, $isSuccess = true)
     {

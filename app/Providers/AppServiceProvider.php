@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\V1\Interfaces\AuthInterface;
-use App\V1\Services\AuthService;
+use App\Interfaces\V1\AuthInterface as V1AuthInterface;
+use App\Services\V1\AuthService as V1AuthService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(AuthInterface::class, AuthService::class);
+        // $this->app->bind(V1AuthInterface::class, V1AuthService::class);
     }
 
     /**

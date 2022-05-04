@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserLoginRequest extends FormRequest
+class UserRegisterRequest extends FormRequest
 {
     use ResponseApi;
 
@@ -29,8 +29,9 @@ class UserLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_name' => 'required|string|max:255',
-            'password' => 'required|max:255'
+            'name' => 'required|string|max:255',
+            'user_name' => 'required|string|min:3|max:16|unique:users,user_name',
+            'password' => 'required|min:5|max:20'
         ];
     }
 
@@ -42,6 +43,7 @@ class UserLoginRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'Name is required',
             'user_name.required' => 'Username is required',
             'password.required' => 'Password is required'
         ];
