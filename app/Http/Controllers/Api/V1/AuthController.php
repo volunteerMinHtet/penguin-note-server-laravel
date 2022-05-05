@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\UserLoginRequest;
 use App\Http\Requests\V1\UserRegisterRequest;
-use App\Interfaces\V1\UserServiceInterface;
+use App\Services\V1\UserService;
 use App\Traits\V1\ResponseApi;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,9 +13,9 @@ class AuthController extends Controller
 {
     use ResponseApi;
 
-    protected UserServiceInterface $userService;
+    protected UserService $userService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
@@ -31,8 +31,11 @@ class AuthController extends Controller
 
     public function createAccount(UserRegisterRequest $request)
     {
-        $user = $this->userService->create($request);
-
-        return $this->successResponse('Successfully registered', $user, 201);
+        try {
+            $token = $this->userService->create($request);
+            return $this->successResponse('Successfully registered', $token, 201);
+        } catch (\Exception $e) {
+            return $this->errorResponse('Whoops, looks like something went wrong', null, 500);
+        }
     }
 }

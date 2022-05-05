@@ -2,6 +2,8 @@
 
 namespace App\Traits\V1;
 
+use Symfony\Component\HttpFoundation\Test\Constraint\ResponseStatusCodeSame;
+
 trait ResponseApi
 {
     public function coreResponse($message, $data = null, $statusCode, $isSuccess = true)
@@ -19,12 +21,12 @@ trait ResponseApi
         }
     }
 
-    public function successResponse($message, $data = null, $statusCode = 200)
+    public function successResponse(string $message, $data = null, $statusCode = 200)
     {
         return $this->coreResponse($message, $data, $statusCode, true);
     }
 
-    public function errorResponse($message, $error = null, $statusCode = 500)
+    public function errorResponse(string $message, $error = null, $statusCode = 500)
     {
         return $this->coreResponse($message, $error, $statusCode, false);
     }
