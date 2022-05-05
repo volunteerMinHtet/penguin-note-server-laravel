@@ -3,9 +3,10 @@
 namespace App\Services\V1;
 
 use App\Http\Requests\V1\UserRegisterRequest;
+use App\Interfaces\V1\UserServiceInterface;
 use App\Models\User;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     public function create(UserRegisterRequest $request): User
     {

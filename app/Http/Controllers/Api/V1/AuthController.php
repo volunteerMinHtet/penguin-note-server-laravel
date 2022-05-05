@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\UserLoginRequest;
 use App\Http\Requests\V1\UserRegisterRequest;
-use App\Services\V1\UserService;
+use App\Interfaces\V1\UserServiceInterface;
 use App\Traits\V1\ResponseApi;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,9 +13,9 @@ class AuthController extends Controller
 {
     use ResponseApi;
 
-    protected UserService $userService;
+    protected UserServiceInterface $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserServiceInterface $userService)
     {
         $this->userService = $userService;
     }
