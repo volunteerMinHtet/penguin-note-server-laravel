@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    protected $apiNamespace = 'App\Http\Controller\Api';
+
     /**
      * The path to the "home" route for your application.
      *
@@ -29,12 +31,18 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->group(base_path('routes/api.php'));
+            // Route::prefix('api')
+            //     ->middleware('api')
+            //     ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            // V1 Routes
+            Route::prefix('api/v1')->middleware(['api', 'api_version:v1'])->namespace("{$this->apiNamespace}\V1")->group(base_path('routes/api_v1.php'));
+
+             // V2 Routes
+            Route::prefix('api/v2')->middleware(['api', 'api_version:v2'])->namespace("{$this->apiNamespace}\V2")->group(base_path('routes/api_v2.php'));
         });
     }
 
@@ -49,4 +57,15 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }
+
+    // protected function mapApiRoutes()
+    // {
+    //     Route::group([
+    //         'middleware' => ['api', 'api_version:v1'],
+    //         'namespace' => "{$this->apiNameSpace}\V1",
+    //         'prefix' => 'api/v1',
+    //     ], function ($router) {
+    //         require base_path('routes/api_v1.php');
+    //     });
+    // }
 }
