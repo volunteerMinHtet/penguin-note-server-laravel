@@ -2,8 +2,6 @@
 
 namespace App\Traits\V1;
 
-use Symfony\Component\HttpFoundation\Test\Constraint\ResponseStatusCodeSame;
-
 trait ResponseApi
 {
     public function coreResponse($message, $data = null, $statusCode, $isSuccess = true)

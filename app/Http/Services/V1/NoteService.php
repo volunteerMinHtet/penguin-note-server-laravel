@@ -2,19 +2,13 @@
 
 namespace App\Http\Services\V1;
 
-use App\Http\Repositories\V1\Interfaces\NoteInterface;
+use App\Http\Resources\V1\NoteResource;
+use App\Models\Note;
 
 class NoteService
 {
-    protected NoteInterface $noteInterface;
-
-    public function __construct(NoteInterface $noteInterface)
+    public function getNoteCollection()
     {
-        $this->noteInterface = $noteInterface;
-    }
-
-    public function getAllNotes()
-    {
-        return $this->noteInterface->getCollection();
+        return NoteResource::collection(Note::all());
     }
 }

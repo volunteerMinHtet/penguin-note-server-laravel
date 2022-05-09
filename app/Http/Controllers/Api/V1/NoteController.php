@@ -19,7 +19,7 @@ class NoteController extends Controller
 
     public function index()
     {
-        $notes = $this->noteService->getAllNotes();
+        $notes = $this->noteService->getNoteCollection();
         return $this->successResponse('Successfully retrieved all notes', $notes);
     }
 }
