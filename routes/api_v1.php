@@ -6,9 +6,9 @@ use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // Auth
 Route::prefix('/auth')->group(function () {
@@ -26,4 +26,7 @@ Route::prefix('/user')->group(function () {
 // Note
 Route::prefix('/notes')->group(function () {
     Route::get('/', [NoteController::class, 'index']);
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/create', [NoteController::class, 'store']);
+    });
 });
