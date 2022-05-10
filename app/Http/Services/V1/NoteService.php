@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1;
 
 use App\Http\Requests\V1\CreateNoteRequest;
+use App\Http\Resources\V1\Collection\NoteCollection;
 use App\Http\Resources\V1\NoteResource;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,9 +12,14 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class NoteService
 {
-    public function getAllNoteCollection(): AnonymousResourceCollection
+    public function getAllNoteCollection(): NoteCollection
     {
-        return NoteResource::collection(Note::all());
+        return new NoteCollection(Note::all());
+    }
+
+    public function getNoteCollectionWithPaginate($limit = 10): NoteCollection
+    {
+        return new NoteCollection(Note::paginate($limit));
     }
 
     public function createANewNote(CreateNoteRequest $request): NoteResource
@@ -32,7 +38,7 @@ class NoteService
             }
         }
         $note->save();
-        return NoteResource::make($note);
+        return new NoteResource($note);
     }
 
     public function storeNotedImageInPublic($image): string
