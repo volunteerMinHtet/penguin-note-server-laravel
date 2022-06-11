@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Collection;
+namespace App\Http\Resources\V1\Collections;
 
 use App\Http\Resources\V1\NoteResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -17,7 +17,7 @@ class NoteCollection extends ResourceCollection
     {
         return [
             'message' => 'Successfully retrieved notes',
-            'data' => $this->collection,
+            'data' => NoteResource::collection($this->collection),
         ];
     }
 }

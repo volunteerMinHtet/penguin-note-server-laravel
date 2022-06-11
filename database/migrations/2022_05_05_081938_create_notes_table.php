@@ -15,11 +15,14 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('title', 255);
+            $table->uuid('user_id');
+            $table->string('title', 255)->nullable();
             $table->text('body');
             $table->string('image')->nullable();
             $table->boolean('is_public')->default(false);
+            $table->string('theme_name')->default('default');
+            $table->string('background_color')->nullable();
+            $table->string('text_color')->nullable();
             $table->timestamps();
         });
     }

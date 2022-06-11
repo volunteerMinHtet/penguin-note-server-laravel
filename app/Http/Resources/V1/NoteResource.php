@@ -19,8 +19,13 @@ class NoteResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
-            'user' => UserResource::make($this->user),
+            'user' => new UserResource($this->user),
             'is_public' => $this->is_public,
+            'theme' => [
+                'name' => $this->theme_name,
+                'background' => $this->background_color,
+                'text' => $this->text_color,
+            ],
             'posted_date_time' => $this->updated_at,
         ];
     }

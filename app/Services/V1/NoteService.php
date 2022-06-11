@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Services\V1;
+namespace App\Services\V1;
 
 use App\Http\Requests\V1\CreateNoteRequest;
-use App\Http\Resources\V1\Collection\NoteCollection;
+use App\Http\Resources\V1\Collections\NoteCollection;
 use App\Http\Resources\V1\NoteResource;
 use App\Models\Note;
 use Illuminate\Database\Eloquent\Collection;
@@ -17,9 +17,14 @@ class NoteService
         return new NoteCollection(Note::all());
     }
 
-    public function getNoteCollectionWithPaginate($limit = 10): NoteCollection
+    public function getPublicNoteCollectionWithPaginate($limit = 10): NoteCollection
     {
-        return new NoteCollection(Note::paginate($limit));
+        return new NoteCollection(Note::where('is_public', false)->paginate($limit));
+    }
+
+    public function getPrivateNoteCollectionWithPaginate($limit = 10): NoteCollection
+    {
+        return new NoteCollection(Note::where('is_public', true)->paginate($limit));
     }
 
     public function createANewNote(CreateNoteRequest $request): NoteResource
@@ -29,6 +34,9 @@ class NoteService
         $note->title = $request->title;
         $note->body = $request->body;
         $note->is_public = $request->is_public;
+        $note->theme_name = $request->theme_name;
+        $note->background_color = $request->background_color;
+        $note->text_color = $request->text_color;
 
         if ($request->has('image')) {
             if ($request->is_public) {

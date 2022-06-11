@@ -29,6 +29,7 @@ class UserLoginRequest extends FormRequest
     public function rules()
     {
         return [
+            'device_name' => 'nullable|string|max:255',
             'user_name' => 'required|string|max:255',
             'password' => 'required|max:255'
         ];

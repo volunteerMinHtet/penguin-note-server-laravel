@@ -28,8 +28,8 @@ class CreateNoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|max:255',
-            'body' => 'required|string|max:1500',
+            'title' => 'nullable|string|max:255',
+            'body' => 'required|string|max:5000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_public' => 'required|boolean',
         ];

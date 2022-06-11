@@ -13,19 +13,30 @@ use Illuminate\Support\Facades\Route;
 // Auth
 Route::prefix('/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+
+    // Token
+    Route::prefix('/token')->group(function () {
+        Route::get('/check', [AuthController::class, 'checkToken']);
+
+        Route::middleware(['auth:sanctum'])->group(function () {
+            // Route::get('/refresh', [AuthController::class, 'refreshToken']);
+        });
+    });
 });
 
 // User
 Route::prefix('/user')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::get('/detail', [UserController::class, 'detail']);
+        Route::get('/', [UserController::class, 'detail']);
     });
-    Route::post('/create', [UserController::class, 'store']);
 });
 
 // Note
 Route::prefix('/notes')->group(function () {
-    Route::get('/', [NoteController::class, 'index']);
+    Route::get('/private', [NoteController::class, 'getPrivateNotes']);
+    Route::get('/public', [NoteController::class, 'getPublicNotes']);
+
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/create', [NoteController::class, 'store']);
     });
