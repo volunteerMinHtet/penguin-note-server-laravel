@@ -7,10 +7,9 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserLoginRequest extends FormRequest
+class CreateNoteRequest extends FormRequest
 {
     use ResponseApi;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,9 +28,10 @@ class UserLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'device_name' => 'nullable|string|max:255',
-            'user_name' => 'required|string|max:255',
-            'password' => 'required|max:255'
+            'title' => 'nullable|string|max:255',
+            'body' => 'required|string|max:5000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'is_public' => 'required|boolean',
         ];
     }
 
@@ -43,8 +43,9 @@ class UserLoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_name.required' => 'Username is required',
-            'password.required' => 'Password is required'
+            'title.required' => 'Title is required',
+            'body.required' => 'Body is required',
+            'is_public.required' => 'Need to know this note is public or not',
         ];
     }
 }

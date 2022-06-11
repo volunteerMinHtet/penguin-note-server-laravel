@@ -3,21 +3,25 @@
 namespace App\Services\V1;
 
 use App\Http\Requests\V1\UserRegisterRequest;
-use App\Interfaces\V1\UserServiceInterface;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
-class UserService implements UserServiceInterface
+class UserService
 {
-    public function create(UserRegisterRequest $request): User
+    public function createNewUser(UserRegisterRequest $request): User
     {
-        $user = new User;
+        $user = new User();
+        $user->id = Str::uuid()->toString();
         $user->name = $request->name;
         $user->user_name = $request->user_name;
         $user->password = bcrypt($request->password);
         $user->save();
-
-        $user->token = $user->createToken($request->name)->plainTextToken;
-
         return $user;
+    }
+
+    public function getUserDetail(): User
+    {
+        return Auth::user();
     }
 }

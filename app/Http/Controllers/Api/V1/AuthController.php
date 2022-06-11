@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\UserLoginRequest;
 use App\Http\Requests\V1\UserRegisterRequest;
-use App\Interfaces\V1\UserServiceInterface;
+use App\Services\V1\AuthService;
+use App\Services\V1\UserService;
 use App\Traits\V1\ResponseApi;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,26 +14,35 @@ class AuthController extends Controller
 {
     use ResponseApi;
 
-    protected UserServiceInterface $userService;
-
-    public function __construct(UserServiceInterface $userService)
+    public function login(UserLoginRequest $request, AuthService $authService)
     {
-        $this->userService = $userService;
-    }
-
-    public function login(UserLoginRequest $request)
-    {
-        if (Auth::attempt(['user_name' => $request->user_name, 'password' => $request->password])) {
-            $token = auth()->user->createToken($request->device_name || auth()->user->name);
-            return $this->successResponse('Successfully logged in', $token->plainTextToken);
+        try {
+            if (Auth::attempt(['user_name' => $request->user_name, 'password' => $request->password])) {
+                $token = $authService->issueToken($request?->device_name, Auth::user());
+                return $this->successResponse('Successfully logged in', ['token' => $token]);
+            }
+            return $this->errorResponse('Provided username or password is not correct', null, 400);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), null, 500);
         }
-        return $this->errorResponse('Provided username or password is not correct', null, 400);
     }
 
-    public function createAccount(UserRegisterRequest $request)
+    public function register(UserRegisterRequest $request, UserService $userService, AuthService $authService)
     {
-        $user = $this->userService->create($request);
+        try {
+            $user = $userService->createNewUser($request);
+            $token = $authService->issueToken($request?->device_name, $user);
+            return $this->successResponse('Successfully created new account', ['token' => $token], 201);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), null, 500);
+        }
+    }
 
-        return $this->successResponse('Successfully registered', $user, 201);
+    public function checkToken()
+    {
+        if (auth('sanctum')->check()) {
+            return $this->successResponse('Token is valid', null);
+        }
+        return $this->errorResponse('Token is invalid', null, 401);
     }
 }
